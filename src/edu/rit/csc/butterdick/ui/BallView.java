@@ -8,16 +8,26 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.graphics.Color;
 
-public class BallView extends SurfaceView implements SurfaceHolder.Callback {
-    private Bitmap bitmap ;
-    private int x=20,y=20;int width,height;
+import edu.rit.csc.butterdick.game.*;
 
-    public BallView(Context context, Bitmap bitmap, int w, int h) {
+public class BallView extends SurfaceView implements SurfaceHolder.Callback {
+
+	// The cell we are currently moving
+    private GameGridCell cell;
+	private MainGame game;
+	private boolean shouldDraw;
+    private int width, height;
+	private int x, y;
+
+    public BallView(Context context, int w, int h, MainGame game) {
         super(context);
 
-		this.bitmap = bitmap;
         width=w;
         height=h;
+		this.game = game;
+
+		shouldDraw = false;
+
         getHolder().addCallback(this);
         setFocusable(true);
     }
@@ -26,14 +36,58 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawColor(Color.BLUE);
-        canvas.drawBitmap(bitmap,x-(bitmap.getWidth()/2),y-(bitmap.getHeight()/2),null);
+		if (shouldDraw)
+		{
+			Bitmap bitmap = cell.getBitmap(getContext());
+			canvas.drawBitmap(bitmap,x-(bitmap.getWidth()/2),y-(bitmap.getHeight()/2),null);
+		}
     }
 
+	private int[] convertToGridCoords(int x, int y)
+	{
+		GameGrid grid = game.getGrid();
+		int col = x / grid.getWidth();
+		int row = y / grid.getHeight();
+
+		return new int[] {row, col};
+	}
+
+	private void handleFirstTouch(int x, int y)
+	{
+		int[] gridCoords = convertToGridCoords(x, y);
+		int row = gridCoords[0];
+		int col = gridCoords[1];
+
+		GameGrid grid = game.getGrid();
+		cell = grid.remove(row, col);
+		shouldDraw = true;
+		this.x = x;
+		this.y = y;
+	}
+
+	private void handleDrag(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
+	private void handleDrop(int x, int y)
+	{
+		int[] gridCoords = convertToGridCoords(x, y);
+		int row = gridCoords[0];
+		int col = gridCoords[1];
+
+		GameGrid grid = game.getGrid();
+		grid.set(row, col, cell);
+		cell = null;
+		shouldDraw = false;
+	}
+
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        x=(int)event.getX();
-        y=(int)event.getY();
+    public boolean onTouchEvent(MotionEvent event)
+	{
+        int x=(int)event.getX();
+        int y=(int)event.getY();
 
         if(x < 25)
             x = 25;
@@ -43,6 +97,25 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
             y = 25;
         if(y > height)
             y = height;
+
+		// Type of touch event
+		switch (event.getAction())
+		{
+			// First touch
+			case MotionEvent.ACTION_DOWN:
+				handleFirstTouch(x, y);
+				break;
+
+			// Dragged
+			case MotionEvent.ACTION_MOVE:
+				handleDrag(x, y);
+				break;
+
+			// Dropped
+			case MotionEvent.ACTION_UP:
+				handleDrop(x, y);
+				break;
+		}
 
         updateBall();
 
