@@ -53,4 +53,16 @@ public class Lambda implements Expression
 	{
 		return String.format("(A. %s %s)", lambdaColorToString(color), body.toString());
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof Lambda)
+		{
+			Lambda l = (Lambda)obj;
+			return color == l.color && body.equals(l.body);
+		}
+		else
+			return false;
+	}
 }

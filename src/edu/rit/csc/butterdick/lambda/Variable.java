@@ -22,4 +22,10 @@ public class Variable implements Expression
 	{
 		return Lambda.lambdaColorToString(color);
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof Variable && ((Variable)obj).color == color;
+	}
 }

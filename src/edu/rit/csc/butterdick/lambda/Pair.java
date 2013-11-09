@@ -29,4 +29,16 @@ public class Pair implements Expression
 	{
 		return String.format("(%s %s)", first.toString(), second.toString());
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof Pair)
+		{
+			Pair p = (Pair)obj;
+			return first.equals(p.first) && second.equals(p.second);
+		}
+		else
+			return false;
+	}
 }
