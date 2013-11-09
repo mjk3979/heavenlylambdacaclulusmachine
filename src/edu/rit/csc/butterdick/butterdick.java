@@ -21,12 +21,13 @@ public class butterdick extends Activity
 		int w=getWindowManager().getDefaultDisplay().getWidth()-25;
 		int h=getWindowManager().getDefaultDisplay().getHeight()-25;
 
-		/*MainGame game = new MainGame();
-		BallView view = new BallView(this, w, h, game);*/
+		MainGame game = new MainGame();
+		BallView view = new BallView(this, w, h, game);
+		setContentView(view);
 
-		LambdaConvertTest tester = new LambdaConvertTest();
+		/*LambdaConvertTest tester = new LambdaConvertTest();
 		setContentView(R.layout.main);
 		TextView tv = (TextView)findViewById(R.id.tv);
-		tv.setText(String.format("Test 1: %s", tester.test1() ? "PASS" : "FAIL"));
+		tv.setText(String.format("Test 1: %s", tester.test1() ? "PASS" : "FAIL"));*/
     }
 }
