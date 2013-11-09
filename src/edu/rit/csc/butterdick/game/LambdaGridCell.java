@@ -23,4 +23,15 @@ public class LambdaGridCell extends GameGridCell
 		// TODO: Return a unique bitmap for each expression
 		return BitmapFactory.decodeResource(ctxt.getResources(), R.drawable.ic_launcher);
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof LambdaGridCell)
+		{
+			LambdaGridCell l = (LambdaGridCell)obj;
+			return l.width == width && l.color == color;
+		}
+		return false;
+	}
 }

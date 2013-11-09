@@ -46,4 +46,26 @@ public class GameGrid
 	{
 		return grid[row][col] != null;
 	}
+
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof GameGrid)
+		{
+			GameGrid grid = (GameGrid)obj;
+			if (width != grid.getWidth() || height != grid.getHeight())
+				return false;
+			for (int row=0;row<height; ++row)
+			{
+				for (int col=0; col<width; ++col)
+				{
+					GameGridCell cell1 = this.grid[row][col];
+					GameGridCell cell2 = grid.get(row,col);
+					if (!(cell1 == null && cell2 == null) && !cell1.equals(cell2))
+						return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 }

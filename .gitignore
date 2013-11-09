@@ -4,4 +4,4 @@ build.xml
 local.properties
 proguard-project.txt
 gen/
-test/
+test
