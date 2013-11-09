@@ -2,5 +2,5 @@ package edu.rit.csc.butterdick.lambda;
 
 public enum LambdaColor
 {
-	RED, BLUE
+	RED, BLUE, YELLOW, GREEN, PINK, PURPLE
 }
