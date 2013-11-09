@@ -1,6 +1,7 @@
 package edu.rit.csc.butterdick.lambda;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public class Lambda implements Expression
 {
@@ -27,6 +28,11 @@ public class Lambda implements Expression
 		}
 		ctxt.put(color, arg);
 		return body.eval(ctxt);
+	}
+
+	public static Map<LambdaColor, Expression> getEmptyContext()
+	{
+		return new HashMap<LambdaColor, Expression>();
 	}
 
 	public static String lambdaColorToString(LambdaColor color)
