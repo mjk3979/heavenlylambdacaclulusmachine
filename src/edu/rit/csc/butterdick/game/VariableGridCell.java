@@ -17,7 +17,17 @@ public class VariableGridCell extends GameGridCell
 	public Bitmap getBitmap(Context ctxt)
 	{
 		// TODO: Return a unique bitmap for each expression
-		return BitmapFactory.decodeResource(ctxt.getResources(), R.drawable.ic_launcher);
+		int id = 0;
+		switch (color)
+		{
+			case BLUE:
+				id = R.drawable.powerpebbleblue;
+				break;
+			case RED:
+				id = R.drawable.powerpebblered;
+				break;
+		}
+		return BitmapFactory.decodeResource(ctxt.getResources(), id);
 	}
 
 	@Override
