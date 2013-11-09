@@ -11,6 +11,11 @@ public class Variable implements Expression
 		this.color = color;
 	}
 
+	public LambdaColor getColor()
+	{
+		return color;
+	}
+
 	@Override
 	public Expression eval(Map<LambdaColor, Expression> ctxt)
 	{

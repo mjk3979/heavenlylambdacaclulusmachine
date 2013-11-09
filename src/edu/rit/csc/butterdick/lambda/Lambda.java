@@ -14,6 +14,16 @@ public class Lambda implements Expression
 		this.body = body;
 	}
 
+	public Expression getBody()
+	{
+		return body;
+	}
+
+	public LambdaColor getColor()
+	{
+		return color;
+	}
+
 	@Override
 	public Expression eval(Map<LambdaColor, Expression> ctxt)
 	{

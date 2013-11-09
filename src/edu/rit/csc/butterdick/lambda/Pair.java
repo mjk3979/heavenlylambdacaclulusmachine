@@ -12,6 +12,16 @@ public class Pair implements Expression
 		this.first = first;
 		this.second = second;
 	}
+
+	public Expression getFirst()
+	{
+		return first;
+	}
+
+	public Expression getSecond()
+	{
+		return second;
+	}
 	
 	@Override
 	public Expression eval(Map<LambdaColor, Expression> ctxt)
