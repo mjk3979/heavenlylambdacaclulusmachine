@@ -30,11 +30,17 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 
         getHolder().addCallback(this);
         setFocusable(true);
+
+		updateBall();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+		if (canvas == null)
+			return;
+		canvas.drawColor(Color.BLACK);
+		game.getGrid().draw(canvas, getContext());
 
 		if (shouldDraw)
 		{
@@ -46,8 +52,13 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 	private int[] convertToGridCoords(int x, int y)
 	{
 		GameGrid grid = game.getGrid();
-		int col = x / grid.getWidth();
-		int row = y / grid.getHeight();
+		int col = (x * grid.getWidth())/width;
+		int row = (y * grid.getHeight())/height;
+
+		if (col >= grid.getWidth())
+			col = grid.getWidth() - 1;
+		if (row >= grid.getHeight())
+			row = grid.getHeight() -1;
 
 		return new int[] {row, col};
 	}
@@ -58,11 +69,16 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 		int row = gridCoords[0];
 		int col = gridCoords[1];
 
+		System.out.printf("COORDS: (%d, %d)\n", row, col);
+
 		GameGrid grid = game.getGrid();
-		cell = grid.remove(row, col);
-		shouldDraw = true;
-		this.x = x;
-		this.y = y;
+		if (grid.notEmpty(row, col))
+		{
+			cell = grid.remove(row, col);
+			shouldDraw = true;
+			this.x = x;
+			this.y = y;
+		}
 	}
 
 	private void handleDrag(int x, int y)
