@@ -26,7 +26,7 @@ public class Lambda implements Expression
 			int x = 5/0;
 		}
 		ctxt.put(color, arg);
-		return body;
+		return body.eval(ctxt);
 	}
 
 	public static String lambdaColorToString(LambdaColor color)
