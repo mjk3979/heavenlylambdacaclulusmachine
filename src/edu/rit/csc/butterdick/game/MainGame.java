@@ -9,8 +9,8 @@ public class MainGame
 	public MainGame()
 	{
 		grid = new GameGrid(5,5);
-		grid.set(0, 4, new GameGridCell(GameGridCellType.LAMBDA_TYPE, LambdaColor.BLUE));
-		grid.set(1, 4, new GameGridCell(GameGridCellType.VARIABLE_TYPE, LambdaColor.BLUE));
+		grid.set(0, 4, new LambdaGridCell(LambdaColor.BLUE, 1));
+		grid.set(1, 4, new VariableGridCell(LambdaColor.BLUE));
 	}
 
 	public GameGrid getGrid()
