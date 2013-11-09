@@ -18,14 +18,14 @@ public abstract class GameGridCell
 
 	public abstract Bitmap getBitmap(Context ctxt);
 
-	public static GameGrid convertExpressionToGameGridCells(Expression expr)
+	public static GameGrid convertExpressionToGameGrid(Expression expr)
 	{
 		GameGrid subGrid = new GameGrid(SUB_GRID_SIZE, SUB_GRID_SIZE);
-		convertExpressionToGameGridCellsHelper(expr, subGrid, 0, 0);
+		convertExpressionToGameGridHelper(expr, subGrid, 0, 0);
 		return subGrid;
 	}
 
-	private static int convertExpressionToGameGridCellsHelper(Expression expr, GameGrid subGrid, int rowOffset, int colOffset)
+	private static int convertExpressionToGameGridHelper(Expression expr, GameGrid subGrid, int rowOffset, int colOffset)
 	{
 		if (expr instanceof Variable)
 		{
@@ -35,14 +35,15 @@ public abstract class GameGridCell
 		else if (expr instanceof Lambda)
 		{
 			Lambda l = (Lambda)expr;
-			int width = convertExpressionToGameGridCellsHelper(l.getBody(), subGrid, rowOffset+1, colOffset);
+			int width = convertExpressionToGameGridHelper(l.getBody(), subGrid, rowOffset+1, colOffset);
 			subGrid.set(rowOffset, colOffset, new LambdaGridCell(l.getColor(), width));
+			return width;
 		}
 		else if (expr instanceof Pair)
 		{
 			Pair p = (Pair)expr;
-			int width = convertExpressionToGameGridCellsHelper(p.getFirst(), subGrid, rowOffset, colOffset);
-			width += convertExpressionToGameGridCellsHelper(p.getSecond(), subGrid, rowOffset, colOffset+width);
+			int width = convertExpressionToGameGridHelper(p.getFirst(), subGrid, rowOffset, colOffset);
+			width += convertExpressionToGameGridHelper(p.getSecond(), subGrid, rowOffset, colOffset+width);
 			return width;
 		}
 
