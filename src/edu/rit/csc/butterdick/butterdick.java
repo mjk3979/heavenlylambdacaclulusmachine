@@ -21,6 +21,8 @@ public class butterdick extends Activity
 		int w=getWindowManager().getDefaultDisplay().getWidth()-25;
 		int h=getWindowManager().getDefaultDisplay().getHeight()-25;
 
+		w = h = Math.min(w, h);
+
 		MainGame game = new MainGame();
 		BallView view = new BallView(this, w, h, game);
 		setContentView(view);

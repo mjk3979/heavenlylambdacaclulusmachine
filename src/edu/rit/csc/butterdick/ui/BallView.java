@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.graphics.Color;
+import android.graphics.RectF;
 
 import edu.rit.csc.butterdick.game.*;
 
@@ -40,12 +41,18 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 		if (canvas == null)
 			return;
 		canvas.drawColor(Color.BLACK);
-		game.getGrid().draw(canvas, getContext());
+		game.getGrid().draw(canvas, width, height, getContext());
 
 		if (shouldDraw)
 		{
 			Bitmap bitmap = cell.getBitmap(getContext());
-			canvas.drawBitmap(bitmap,x-(bitmap.getWidth()/2),y-(bitmap.getHeight()/2),null);
+			float size = width / game.getGrid().getWidth();
+			float l = x - size/4;
+			float ri = x + size/4;
+			float t = y - size/4;
+			float b = y + size/4;
+			RectF dst = new RectF(l, t, ri, b);
+			canvas.drawBitmap(bitmap,null,dst,null);
 		}
     }
 

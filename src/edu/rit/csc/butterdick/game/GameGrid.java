@@ -14,6 +14,8 @@ public class GameGrid
 	int height;
 	private GameGridCell grid[][];
 
+	public static final int lineWidth = 5;
+
 	public GameGrid(int width, int height)
 	{
 		this.width = width;
@@ -75,22 +77,21 @@ public class GameGrid
 		return false;
 	}
 
-	public void draw(Canvas canvas, Context context)
+	public void draw(Canvas canvas, int cWidth, int cHeight, Context context)
 	{
 		Paint linePaint = new Paint();
-		int lineWidth = 5;
 		linePaint.setStrokeWidth(lineWidth);
 		linePaint.setColor(Color.WHITE);
 		for (int r=0;r<=height;++r)
 		{
 			System.out.println("CANVAS:" + canvas);
-			float y = r * (canvas.getHeight() / height);
-			canvas.drawLine(0, y, canvas.getWidth(), y, linePaint);
+			float y = r * (cHeight / height);
+			canvas.drawLine(0, y, cWidth, y, linePaint);
 		}
 		for (int c=0;c<=width;++c)
 		{
-			float x = c * (canvas.getWidth() / width);
-			canvas.drawLine(x, 0, x, canvas.getHeight(), linePaint);
+			float x = c * (cWidth / width);
+			canvas.drawLine(x, 0, x, cHeight, linePaint);
 		}
 		for (int r=0;r<height;++r)
 		{
@@ -98,13 +99,13 @@ public class GameGrid
 			{
 				if (notEmpty(r, c))
 				{
-					float t = r * (canvas.getHeight() / height);
-					float l = c * (canvas.getWidth() / width);
+					float t = r * (cHeight / height);
+					float l = c * (cWidth / width);
 
-					float b = (r+1) * (canvas.getHeight() / height);
-					float ri = (c+1) * (canvas.getWidth() / width);
+					float b = (r+1) * (cHeight / height);
+					float ri = (c+1) * (cWidth / width);
 					Bitmap bitmap = grid[r][c].getBitmap(context);
-					RectF dst = new RectF(l-lineWidth, t-lineWidth, ri-lineWidth, b-lineWidth);
+					RectF dst = new RectF(l+lineWidth, t+lineWidth, ri-lineWidth, b-lineWidth);
 					canvas.drawBitmap(bitmap, null, dst, null);
 				}
 			}
