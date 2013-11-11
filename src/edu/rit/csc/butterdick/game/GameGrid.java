@@ -79,6 +79,7 @@ public class GameGrid
 
 	public void draw(Canvas canvas, int cWidth, int cHeight, Context context)
 	{
+		cWidth = cHeight = Math.min(cWidth, cHeight);
 		Paint linePaint = new Paint();
 		linePaint.setStrokeWidth(lineWidth);
 		linePaint.setColor(Color.WHITE);

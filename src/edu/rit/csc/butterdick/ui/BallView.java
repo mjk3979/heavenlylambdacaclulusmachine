@@ -41,7 +41,8 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 		if (canvas == null)
 			return;
 		canvas.drawColor(Color.BLACK);
-		game.getGrid().draw(canvas, width, height, getContext());
+		game.getGrid().draw(canvas, width, (height * 2) / 3, getContext());
+		game.getInventory().draw(canvas, getContext(), width, height/4, 0, (height * 3) / 4);
 
 		if (shouldDraw)
 		{
