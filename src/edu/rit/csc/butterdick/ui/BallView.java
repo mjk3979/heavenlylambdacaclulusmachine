@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.Rect;
 
 import edu.rit.csc.butterdick.game.*;
 
@@ -19,6 +20,7 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean shouldDraw;
     private int width, height;
 	private int x, y;
+	private Rect mainGridRect, invRect;
 
     public BallView(Context context, int w, int h, MainGame game) {
         super(context);
@@ -26,6 +28,9 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
         width=w;
         height=h;
 		this.game = game;
+
+		mainGridRect = new Rect(0, 0, width, (height * 2) / 3);
+		invRect = new Rect(0, (height * 3) / 4, width, height/4);
 
 		shouldDraw = false;
 
@@ -40,9 +45,10 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
         super.onDraw(canvas);
 		if (canvas == null)
 			return;
+
 		canvas.drawColor(Color.BLACK);
-		game.getGrid().draw(canvas, width, (height * 2) / 3, getContext());
-		game.getInventory().draw(canvas, getContext(), width, height/4, 0, (height * 3) / 4);
+		game.getGrid().draw(canvas, mainGridRect.width(), mainGridRect.height(), getContext());
+		game.getInventory().draw(canvas, getContext(), invRect.width(), invRect.height(), invRect.left, invRect.top);
 
 		if (shouldDraw)
 		{
@@ -60,15 +66,19 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 	private int[] convertToGridCoords(int x, int y)
 	{
 		GameGrid grid = game.getGrid();
-		int col = (x * grid.getWidth())/width;
-		int row = (y * grid.getHeight())/height;
+		if (mainGridRect.contains(x, y))
+		{
+			int col = (x * grid.getWidth())/mainGridRect.width();
+			int row = (y * grid.getHeight())/mainGridRect.height();
 
-		if (col >= grid.getWidth())
-			col = grid.getWidth() - 1;
-		if (row >= grid.getHeight())
-			row = grid.getHeight() -1;
+			if (col >= grid.getWidth())
+				col = grid.getWidth() - 1;
+			if (row >= grid.getHeight())
+				row = grid.getHeight() -1;
 
-		return new int[] {row, col};
+			return new int[] {row, col};
+		}
+		return null;
 	}
 
 	private void handleFirstTouch(int x, int y)
