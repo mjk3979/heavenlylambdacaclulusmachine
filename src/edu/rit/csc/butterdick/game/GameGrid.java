@@ -1,6 +1,7 @@
 package edu.rit.csc.butterdick.game;
 
 import edu.rit.csc.butterdick.lambda.Expression;
+import edu.rit.csc.butterdick.ui.DragAndDropGrid;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -8,7 +9,7 @@ import android.graphics.Bitmap;
 import android.content.Context;
 import android.graphics.Color;
 
-public class GameGrid
+public class GameGrid implements DragAndDropGrid<GameGridCell>
 {
 	int width;
 	int height;
@@ -23,26 +24,31 @@ public class GameGrid
 		this.grid = new GameGridCell[width][height];
 	}
 
+	@Override
 	public int getWidth()
 	{
 		return width;
 	}
 
+	@Override
 	public int getHeight()
 	{
 		return height;
 	}
 
+	@Override
 	public void set(int row, int col, GameGridCell cell)
 	{
 		grid[row][col] = cell;
 	}
 
+	@Override
 	public GameGridCell get(int row, int col)
 	{
 		return grid[row][col];
 	}
 
+	@Override
 	public GameGridCell remove(int row, int col)
 	{
 		GameGridCell retval = get(row, col);
@@ -50,6 +56,7 @@ public class GameGrid
 		return retval;
 	}
 
+	@Override
 	public boolean notEmpty(int row, int col)
 	{
 		return grid[row][col] != null;
