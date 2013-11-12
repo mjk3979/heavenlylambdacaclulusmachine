@@ -22,15 +22,14 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 	private int x, y;
 	private Rect mainGridRect, invRect;
 
-    public BallView(Context context, int w, int h, MainGame game) {
+    public BallView(Context context, MainGame game) {
         super(context);
 
-        width=w;
-        height=h;
 		this.game = game;
 
-		mainGridRect = new Rect(0, 0, width, (height * 2) / 3);
-		invRect = new Rect(0, (height * 3) / 4, width, height/4);
+		width = -1;
+		height = -1;
+
 
 		shouldDraw = false;
 
@@ -40,17 +39,28 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 		updateBall();
     }
 
+	private void calcDim()
+	{
+        width=getWidth();
+        height=getHeight();
+
+		mainGridRect = new Rect(0, 0, width, (height * 2) / 3);
+		invRect = new Rect(0, (height * 3) / 4, width, height);
+	}
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 		if (canvas == null)
 			return;
+		
+		calcDim();
 
 		canvas.drawColor(Color.BLACK);
 		game.getGrid().draw(canvas, mainGridRect.width(), mainGridRect.height(), getContext());
 		game.getInventory().draw(canvas, getContext(), invRect.width(), invRect.height(), invRect.left, invRect.top);
 
-		if (shouldDraw)
+		if (shouldDraw && height > 0 && width > 0)
 		{
 			Bitmap bitmap = cell.getBitmap(getContext());
 			float size = width / game.getGrid().getWidth();
@@ -83,7 +93,12 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void handleFirstTouch(int x, int y)
 	{
+		calcDim();
+
 		int[] gridCoords = convertToGridCoords(x, y);
+		if (gridCoords == null)
+			return; 
+
 		int row = gridCoords[0];
 		int col = gridCoords[1];
 
