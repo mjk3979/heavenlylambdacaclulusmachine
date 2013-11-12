@@ -7,8 +7,9 @@ import android.content.Context;
 import android.graphics.Color;
 import java.util.ArrayList;
 import edu.rit.csc.butterdick.lambda.LambdaColor;
+import edu.rit.csc.butterdick.ui.DragAndDropGrid;
 
-public class InventoryGrid
+public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 {
 	public static LambdaColor[] COLORS_TO_CONSIDER = new LambdaColor[] {LambdaColor.BLUE, LambdaColor.RED};
 	private GameGrid mainGrid;
@@ -18,6 +19,43 @@ public class InventoryGrid
 	public InventoryGrid(GameGrid grid)
 	{
 		this.mainGrid = grid;
+	}
+
+	@Override
+	public int getWidth()
+	{
+		return COLORS_TO_CONSIDER.length;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return 1;
+	}
+
+	@Override
+	public GameGridCell get(int row, int col)
+	{
+		ArrayList<LambdaGridCell> cells = getLambdaCellsToDraw();
+		return cells.get(col);
+	}
+
+	@Override
+	public void set(int row, int col, GameGridCell cell)
+	{
+		return;
+	}
+
+	@Override
+	public GameGridCell remove(int row, int col)
+	{
+		return get(row, col);
+	}
+
+	@Override
+	public boolean notEmpty(int row, int col)
+	{
+		return get(row, col) != null;
 	}
 
 	public ArrayList<LambdaGridCell> getLambdaCellsToDraw()
