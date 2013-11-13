@@ -12,7 +12,13 @@ import android.graphics.Rect;
 
 import edu.rit.csc.butterdick.game.*;
 
-public class BallView extends SurfaceView implements SurfaceHolder.Callback {
+public class BallView extends SurfaceView implements SurfaceHolder.Callback
+{
+	private static class TouchInfo
+	{
+		public DragAndDropGrid<GameGridCell> grid;
+		public int row, col;
+	}
 
 	// The cell we are currently moving
     private GameGridCell cell;
@@ -29,7 +35,6 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 
 		width = -1;
 		height = -1;
-
 
 		shouldDraw = false;
 
@@ -73,38 +78,52 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 		}
     }
 
-	private int[] convertToGridCoords(int x, int y)
+	private TouchInfo convertToGridCoords(int x, int y)
 	{
-		GameGrid grid = game.getGrid();
+		TouchInfo retval = new TouchInfo();
+		int col, row;
 		if (mainGridRect.contains(x, y))
 		{
-			int col = (x * grid.getWidth())/mainGridRect.width();
-			int row = (y * grid.getHeight())/mainGridRect.height();
+			GameGrid grid = game.getGrid();
+			col = (x * grid.getWidth())/mainGridRect.width();
+			row = (y * grid.getHeight())/mainGridRect.height();
 
-			if (col >= grid.getWidth())
-				col = grid.getWidth() - 1;
-			if (row >= grid.getHeight())
-				row = grid.getHeight() -1;
-
-			return new int[] {row, col};
+			retval.grid = grid;
 		}
-		return null;
+		else if (invRect.contains(x, y))
+		{
+			InventoryGrid inv = game.getInventory();
+			row = 0;
+			col = ((x - invRect.left)  * inv.getWidth())/invRect.width();
+
+			retval.grid = inv;
+		}
+		else
+			return null;
+
+		if (col >= retval.grid.getWidth())
+			col = retval.grid.getWidth() - 1;
+		if (row >= retval.grid.getHeight())
+			row = retval.grid.getHeight() -1;
+
+		retval.col = col;
+		retval.row = row;
+
+		return retval;
 	}
 
 	private void handleFirstTouch(int x, int y)
 	{
 		calcDim();
 
-		int[] gridCoords = convertToGridCoords(x, y);
-		if (gridCoords == null)
+		TouchInfo info = convertToGridCoords(x, y);
+		if (info == null)
 			return; 
 
-		int row = gridCoords[0];
-		int col = gridCoords[1];
+		int row = info.row;
+		int col = info.col;
 
-		System.out.printf("COORDS: (%d, %d)\n", row, col);
-
-		GameGrid grid = game.getGrid();
+		DragAndDropGrid<GameGridCell> grid = info.grid;
 		if (grid.notEmpty(row, col))
 		{
 			cell = grid.remove(row, col);
@@ -122,11 +141,11 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void handleDrop(int x, int y)
 	{
-		int[] gridCoords = convertToGridCoords(x, y);
-		int row = gridCoords[0];
-		int col = gridCoords[1];
+		TouchInfo info = convertToGridCoords(x, y);
+		int row = info.row;
+		int col = info.col;
 
-		GameGrid grid = game.getGrid();
+		DragAndDropGrid<GameGridCell> grid = info.grid;
 		grid.set(row, col, cell);
 		cell = null;
 		shouldDraw = false;
