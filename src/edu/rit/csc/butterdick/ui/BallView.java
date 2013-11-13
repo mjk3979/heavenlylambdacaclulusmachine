@@ -127,6 +127,7 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback
 		if (grid.notEmpty(row, col))
 		{
 			cell = grid.remove(row, col);
+			game.setMovingCell(cell);
 			shouldDraw = true;
 			this.x = x;
 			this.y = y;
@@ -148,6 +149,7 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback
 		DragAndDropGrid<GameGridCell> grid = info.grid;
 		grid.set(row, col, cell);
 		cell = null;
+		game.setMovingCell(null);
 		shouldDraw = false;
 	}
 

@@ -6,6 +6,7 @@ public class MainGame
 {
 	private GameGrid grid;
 	private InventoryGrid inventory;
+	private GameGridCell movingCell;
 
 	public MainGame()
 	{
@@ -13,7 +14,7 @@ public class MainGame
 		grid.set(0, 4, new LambdaGridCell(LambdaColor.BLUE, 1));
 		grid.set(1, 4, new VariableGridCell(LambdaColor.BLUE));
 
-		inventory = new InventoryGrid(grid);
+		inventory = new InventoryGrid(this);
 	}
 
 	public GameGrid getGrid()
@@ -24,5 +25,15 @@ public class MainGame
 	public InventoryGrid getInventory()
 	{
 		return inventory;
+	}
+
+	public GameGridCell getMovingCell()
+	{
+		return movingCell;
+	}
+
+	public void setMovingCell(GameGridCell cell)
+	{
+		this.movingCell = cell;
 	}
 }

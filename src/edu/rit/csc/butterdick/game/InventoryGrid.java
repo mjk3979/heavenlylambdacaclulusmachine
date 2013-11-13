@@ -12,13 +12,15 @@ import edu.rit.csc.butterdick.ui.DragAndDropGrid;
 public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 {
 	public static LambdaColor[] COLORS_TO_CONSIDER = new LambdaColor[] {LambdaColor.BLUE, LambdaColor.RED};
+	private MainGame game;
 	private GameGrid mainGrid;
 
 	private int lineWidth = GameGrid.lineWidth;
 
-	public InventoryGrid(GameGrid grid)
+	public InventoryGrid(MainGame game)
 	{
-		this.mainGrid = grid;
+		this.game = game;
+		this.mainGrid = game.getGrid();
 	}
 
 	@Override
@@ -71,6 +73,10 @@ public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 					lambdaCells.set(lambdaCells.indexOf(mainGrid.get(r,c)), null);
 			}
 		}
+
+		if (game.getMovingCell() instanceof LambdaGridCell)
+			lambdaCells.set(lambdaCells.indexOf(game.getMovingCell()), null);
+
 		return lambdaCells;
 	}
 
