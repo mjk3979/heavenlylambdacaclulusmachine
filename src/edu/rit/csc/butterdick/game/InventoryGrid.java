@@ -38,7 +38,7 @@ public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 	@Override
 	public GameGridCell get(int row, int col)
 	{
-		ArrayList<LambdaGridCell> cells = getLambdaCellsToDraw();
+		ArrayList<GameGridCell> cells = getCellsToDraw();
 		return cells.get(col);
 	}
 
@@ -80,11 +80,26 @@ public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 		return lambdaCells;
 	}
 
+	public ArrayList<GameGridCell> getCellsToDraw()
+	{
+		ArrayList<GameGridCell> retval = new ArrayList<GameGridCell>();
+
+		retval.addAll(getLambdaCellsToDraw());
+
+		ArrayList<VariableGridCell> pebbles = new ArrayList<VariableGridCell>();
+		for (LambdaColor color : COLORS_TO_CONSIDER)
+			pebbles.add(new VariableGridCell(color));
+
+		retval.addAll(pebbles);
+
+		return retval;
+	}
+
 	public void draw(Canvas canvas, Context ctxt, int width, int height, int startX, int startY)
 	{
 		canvas.save();
 		canvas.translate(startX, startY);
-		ArrayList<LambdaGridCell> lambdaCells = getLambdaCellsToDraw();
+		ArrayList<GameGridCell> lambdaCells = getCellsToDraw();
 		int gridWidth = getWidth();
 		int gridHeight = getHeight();
 
