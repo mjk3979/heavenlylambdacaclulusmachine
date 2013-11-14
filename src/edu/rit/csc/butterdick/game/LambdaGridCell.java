@@ -17,6 +17,11 @@ public class LambdaGridCell extends GameGridCell
 		this.width = width;
 	}
 
+	public int getWidth()
+	{
+		return width;
+	}
+
 	@Override
 	public Bitmap getBitmap(Context ctxt)
 	{
