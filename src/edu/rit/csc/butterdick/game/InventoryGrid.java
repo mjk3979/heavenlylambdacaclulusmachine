@@ -26,13 +26,13 @@ public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 	@Override
 	public int getWidth()
 	{
-		return COLORS_TO_CONSIDER.length;
+		return mainGrid.getWidth();
 	}
 
 	@Override
 	public int getHeight()
 	{
-		return 1;
+		return (int)Math.ceil((float)COLORS_TO_CONSIDER.length / mainGrid.getWidth());
 	}
 
 	@Override
@@ -85,34 +85,46 @@ public class InventoryGrid implements DragAndDropGrid<GameGridCell>
 		canvas.save();
 		canvas.translate(startX, startY);
 		ArrayList<LambdaGridCell> lambdaCells = getLambdaCellsToDraw();
-		int gridWidth = COLORS_TO_CONSIDER.length;
+		int gridWidth = getWidth();
+		int gridHeight = getHeight();
 
-		height = Math.min((width / gridWidth), height);
-		width = height * gridWidth;
+		height = (width * getHeight()) / gridWidth;
 
 		Paint linePaint = new Paint();
 		linePaint.setColor(Color.WHITE);
 		linePaint.setStrokeWidth(GameGrid.lineWidth);
 		
-		canvas.drawLine(0, 0, width, 0, linePaint);
-		canvas.drawLine(0, height, width, height, linePaint);
-		for (int r=0;r<gridWidth;++r)
+		outer:
+		for (int r=0;r<gridHeight;++r)
 		{
-			float l = r * width / (float)gridWidth;
-			float ri = (r+1) * width / (float)gridWidth;
-			float t = 0;
-			float b = height;
-			canvas.drawLine(l, t, l, b, linePaint);
+			float t = (r * height) / gridHeight;
+			float b = ((r+1) * height) / gridHeight;
 
-			RectF dst = new RectF(l+lineWidth, t+lineWidth, ri-lineWidth, b-lineWidth);
-			if (lambdaCells.get(r) != null)
-				canvas.drawBitmap(lambdaCells.get(r).getBitmap(ctxt), null, dst, null);
+			for (int c=0;c<gridWidth;++c)
+			{
+
+				float l = c * width / (float)gridWidth;
+				float ri = (c+1) * width / (float)gridWidth;
+				canvas.drawLine(l, t, l, b, linePaint);
+
+				int i = r * gridWidth + c;
+				if (i >= lambdaCells.size())
+					break outer;
+
+				if (r==0)
+					canvas.drawLine(l, t, ri, t, linePaint);
+				canvas.drawLine(l, b, ri, b, linePaint);
+
+				RectF dst = new RectF(l+lineWidth, t+lineWidth, ri-lineWidth, b-lineWidth);
+				if (lambdaCells.get(i) != null)
+					canvas.drawBitmap(lambdaCells.get(i).getBitmap(ctxt), null, dst, null);
+			}
+
+			float l = (float)(width-lineWidth/2.0);
+			float ri = (float)(width-lineWidth/2.0);
+			canvas.drawLine(l, t, ri, b, linePaint);
 		}
-		float l = (float)(width-lineWidth/2.0);
-		float t = 0;
-		float r = (float)(width-lineWidth/2.0);
-		float b = height;
-		canvas.drawLine(l, t, r, b, linePaint);
+
 		canvas.restore();
 	}
 }
