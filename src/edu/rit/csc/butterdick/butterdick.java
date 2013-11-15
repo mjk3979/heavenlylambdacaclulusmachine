@@ -18,14 +18,6 @@ public class butterdick extends Activity
     {
         super.onCreate(savedInstanceState);
 
-		MainGame game = new MainGame();
-		BallView view = new BallView(this, game);
-
-		setContentView(view);
-
-		/*LambdaConvertTest tester = new LambdaConvertTest();
 		setContentView(R.layout.main);
-		TextView tv = (TextView)findViewById(R.id.tv);
-		tv.setText(String.format("Test 1: %s", tester.test1() ? "PASS" : "FAIL"));*/
     }
 }

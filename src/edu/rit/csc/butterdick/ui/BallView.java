@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 
 import edu.rit.csc.butterdick.game.*;
 
@@ -28,10 +29,11 @@ public class BallView extends SurfaceView implements SurfaceHolder.Callback
 	private int x, y;
 	private Rect mainGridRect, invRect;
 
-    public BallView(Context context, MainGame game) {
-        super(context);
+    public BallView(Context context, AttributeSet attrs)
+	{
+        super(context, attrs);
 
-		this.game = game;
+		game = new MainGame();
 
 		width = -1;
 		height = -1;
